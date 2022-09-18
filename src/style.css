@@ -1,0 +1,25 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #333333;
+
+  --color-primary-normal: #6190e8;
+  --color-primary-light: #78a4fa;
+  --color-primary-dark: #346fc2;
+
+  --color-access-info: #78a4fa;
+  --color-access-positive: #13ce66;
+  --color-access-negative: #ff4949;
+  --color-access-warning: #ffc82c;
+
+  --color-text-normal: #333333;
+  --color-text-tip: #666666;
+  --color-text-light: #999999;
+  --color-text-grey: #f0f0f0;
+
+  --color-bg-normal: #ecf5fd;
+  --color-bg-light: #fafbfc;
+  --color-border: #c5d9e8;
+}
