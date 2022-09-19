@@ -23,3 +23,8 @@
   --color-bg-light: #fafbfc;
   --color-border: #c5d9e8;
 }
+
+body {
+  width: 100vw;
+  min-height: 100vh;
+}

@@ -46,7 +46,7 @@ onMounted(init)
 <style scoped>
 .c-wallet {
   position: absolute;
-  right: 1em;
+  right: 2em;
 }
 
 .c-wallet .c-wallet_login {

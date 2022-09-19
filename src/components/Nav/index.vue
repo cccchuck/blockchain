@@ -49,7 +49,6 @@ const navList: RouteRecordRaw[] = generateNavList()
 .c-nav-menu .c-nav-menu-item:hover {
   font-weight: bold;
   background-color: var(--color-bg-light);
-  border: 1px solid var(--color-bg-border);
   cursor: pointer;
 }
 

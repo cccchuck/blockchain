@@ -18,7 +18,7 @@ import CWallet from '@/components/Wallet/index.vue'
 nav {
   position: relative;
   display: flex;
-  padding: 1em;
+  padding: 1em 2em;
   justify-content: center;
   align-items: center;
 }
