@@ -3,7 +3,7 @@ const props = defineProps(['loading'])
 </script>
 
 <template>
-  <div class="loading-cpn" :class="{ loading: props.loading }">
+  <div class="c-loading" :class="{ loading: props.loading }">
     <div class="spin">
       <a-spin dot></a-spin>
     </div>
@@ -11,7 +11,7 @@ const props = defineProps(['loading'])
 </template>
 
 <style scoped>
-.loading-cpn {
+.c-loading {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -24,7 +24,7 @@ const props = defineProps(['loading'])
   transition: opacity 300ms linear, visibility 0ms linear 300ms;
 }
 
-.loading-cpn.loading {
+.c-loading.loading {
   opacity: 1;
   visibility: visible;
   transition: visibility 0ms linear;
