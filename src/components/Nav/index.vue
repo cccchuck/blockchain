@@ -11,7 +11,11 @@ const generateNavList = () => {
   let result: RouteRecordRaw[] = []
   const routes = router.getRoutes()
   routes.forEach((e) => {
-    if (e.children.length > 0) result = e.children
+    if (e.children.length > 0) {
+      result = e.children.filter((item) => {
+        if (item.meta) return !item.meta.hidden
+      })
+    }
   })
   return result
 }
