@@ -1,5 +1,5 @@
 export interface IResponseData {
   code: number
-  message: string
+  msg: string
   data: unknown
 }

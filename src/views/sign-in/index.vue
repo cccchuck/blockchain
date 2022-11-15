@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-import { Message, Notification } from '@arco-design/web-vue'
+import { Notification } from '@arco-design/web-vue'
 import { ref } from 'vue'
 import Loading from '@/components/Loading/index.vue'
 import router from '@/router'
-import { setAuthToken } from '@/utils/auth'
+import pinia, { useUserStore } from '@/store'
+import { APISignIn } from '@/api'
+
+const userStore = useUserStore(pinia)
 
 const loading = ref(false)
 
@@ -26,17 +29,22 @@ const validator = () => {
   return true
 }
 
-const handleSignIn = () => {
+const handleSignIn = async () => {
   if (!validator()) return
 
   loading.value = true
 
-  setTimeout(() => {
-    loading.value = false
-    Message.success('Login Successfully, will redirect...')
-    setAuthToken('Test Token')
-    router.push('/')
-  }, 2000)
+  const data = await APISignIn({
+    username: form.value.username,
+    password: form.value.password,
+  })
+
+  if (data)
+    userStore.login(form.value.username, (data as any).uid, (data as any).token)
+
+  loading.value = false
+
+  router.push({ path: '/' })
 }
 </script>
 

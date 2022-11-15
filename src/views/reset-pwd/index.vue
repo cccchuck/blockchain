@@ -118,7 +118,7 @@ const handleResetPassword = () => {
           <a-input-search
             search-button
             v-model="form.code"
-            placeholder="Please enter something"
+            placeholder="Please enter verify code"
             :button-text="getBtnText"
             :button-props="{ disabled: isWaitCode }"
             @search="handleSendCode"

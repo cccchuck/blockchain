@@ -52,7 +52,6 @@ const routes = [
     component: () => import('@/views/reset-pwd/index.vue'),
     meta: {
       title: 'Reset Password',
-      requireAuth: true,
     },
   },
 ]

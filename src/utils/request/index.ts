@@ -1,51 +1,7 @@
 import axios from 'axios'
-import { useRouter } from 'vue-router'
-import { Message } from '@arco-design/web-vue'
-import { getAuthToken, setAuthToken } from '../auth'
+import { getAuthToken } from '../auth'
 
-import type { AxiosRequestConfig, AxiosResponse } from 'axios'
-import type { IResponseData } from './types'
-
-const router = useRouter()
-
-const handleServerResponse = (data: IResponseData) => {
-  if (!data.message.includes('success')) {
-    switch (data.code) {
-      case 40001:
-        Message.error('Authorized Failed')
-        break
-      case 40002:
-        Message.error('Authorized Expiration')
-        setAuthToken('')
-        router.push('/sign-in')
-        break
-    }
-    return null
-  }
-  return data.data
-}
-
-const handleStatusError = (error: any) => {
-  if (error.config) {
-    switch (error.config) {
-      case 401:
-        Message.error('Authorized Failed')
-        break
-      case 403:
-        Message.error('Forbidden')
-        break
-      case 404:
-        Message.error('Source Not Exist')
-        break
-      case 429:
-        Message.error('Request speed limited')
-        break
-      case 500:
-        Message.error('Server Error')
-        break
-    }
-  }
-}
+import type { AxiosRequestConfig } from 'axios'
 
 const pendingRequest = new Map()
 
@@ -74,7 +30,7 @@ const cancelPendingRequest = (key: string) => {
 
 const request = (config: AxiosRequestConfig<any>) => {
   const service = axios.create({
-    baseURL: 'https://localhost:',
+    baseURL: 'http://localhost:8000',
     timeout: 5000,
   })
 
@@ -89,7 +45,11 @@ const request = (config: AxiosRequestConfig<any>) => {
       }
       addPendingRequest(config)
 
-      if (config.headers) config.headers['X-Token'] = getAuthToken()
+      if (config.headers)
+        config.headers['Authorization'] = getAuthToken()
+          ? `Bearer ${getAuthToken()}`
+          : getAuthToken()
+
       return config
     },
     (error) => {
@@ -101,13 +61,11 @@ const request = (config: AxiosRequestConfig<any>) => {
     (response) => {
       const key = getPendingRequestKey(response.config)
       removePendingRequest(key)
-      const data = handleServerResponse(response.data)
-      return data as AxiosResponse<any, any>
+      return response
     },
     (error) => {
       const key = getPendingRequestKey(error?.config)
       removePendingRequest(key)
-      handleStatusError(error)
       return Promise.reject(error)
     }
   )
