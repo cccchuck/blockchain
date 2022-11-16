@@ -3,6 +3,7 @@ import { Message, Notification } from '@arco-design/web-vue'
 import { ref } from 'vue'
 
 import Loading from '@/components/Loading/index.vue'
+import { APISignUp } from '@/api'
 
 const loading = ref(false)
 const form = ref({
@@ -52,15 +53,21 @@ const validator = () => {
   return true
 }
 
-const handleSignUp = () => {
+const handleSignUp = async () => {
   if (!validator()) return
 
   loading.value = true
 
-  setTimeout(() => {
+  const result = await APISignUp({
+    username: form.value.username,
+    password: form.value.password,
+    email: form.value.email,
+  })
+
+  if (result !== null) {
     loading.value = false
     Message.success('Sign Up Success')
-  }, 2000)
+  }
 }
 </script>
 

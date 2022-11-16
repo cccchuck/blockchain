@@ -31,6 +31,13 @@ const routes = [
           title: 'Stake',
         },
       },
+      {
+        path: '/wallet',
+        component: () => import('@/views/wallet/index.vue'),
+        meta: {
+          title: 'Wallet',
+        },
+      },
     ],
   },
   {

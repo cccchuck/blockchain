@@ -26,9 +26,6 @@ onMounted(async () => {
       <div class="c-user-bar__info">
         <p class="c-user-bar__username">{{ userInfo.username }}</p>
 
-        <span class="c-user-bar__wallet"
-          ><img src="@/assets/icon/wallet.svg" alt="wallet"
-        /></span>
         <span class="c-user-bar__logout" @click="userStore.logout()"
           ><img src="@/assets/icon/logout.svg" alt="logout"
         /></span>

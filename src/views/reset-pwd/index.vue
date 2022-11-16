@@ -3,6 +3,7 @@ import { Message, Notification } from '@arco-design/web-vue'
 import { ref } from 'vue'
 import Loading from '@/components/Loading/index.vue'
 import { computed } from '@vue/reactivity'
+import { APIResetPwd, APISendCode } from '@/api'
 
 const loading = ref(false)
 const isWaitCode = ref(false)
@@ -11,6 +12,7 @@ const waitSecs = ref(60)
 const form = ref({
   code: '',
   email: '',
+  username: '',
   password: '',
 })
 
@@ -83,21 +85,33 @@ const handleSendCode = async () => {
 
   const msg = Message.loading('Sending Security Code')
 
-  setTimeout(() => {
-    msg.close()
+  const result = await APISendCode({
+    username: form.value.username,
+    email: form.value.email,
+  })
+
+  msg.close()
+  if (result !== null) {
     Message.success('Check Security Code in your box')
     updateWaitStatus()
-  }, 2000)
+  }
 }
 
-const handleResetPassword = () => {
+const handleResetPassword = async () => {
   if (!validatorForReset()) return
 
   loading.value = true
-  setTimeout(() => {
+
+  const result = await APIResetPwd({
+    username: form.value.username,
+    password: form.value.password,
+    code: form.value.code,
+  })
+
+  if (result !== null) {
     loading.value = false
     Message.success('Reset password successfully')
-  }, 2000)
+  }
 }
 </script>
 
@@ -108,13 +122,19 @@ const handleResetPassword = () => {
     <div class="sign-in fade-in-bottom">
       <h1 class="text-center">Reset Password</h1>
       <a-form :model="form" layout="vertical">
-        <a-form-item field="name" label="Email">
+        <a-form-item label="Username">
+          <a-input
+            v-model="form.username"
+            placeholder="please enter your username..."
+          />
+        </a-form-item>
+        <a-form-item label="Email">
           <a-input
             v-model="form.email"
             placeholder="please enter your email address..."
           />
         </a-form-item>
-        <a-form-item field="post" label="Security Code">
+        <a-form-item label="Security Code">
           <a-input-search
             search-button
             v-model="form.code"
@@ -124,7 +144,7 @@ const handleResetPassword = () => {
             @search="handleSendCode"
           />
         </a-form-item>
-        <a-form-item field="post" label="New Password">
+        <a-form-item label="New Password">
           <a-input-password
             v-model="form.password"
             placeholder="please enter your new password..."
