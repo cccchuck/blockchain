@@ -1,11 +1,17 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-
-import { APIGetTokenList, APIPreSwap } from '@/api/token'
+import { computed } from '@vue/reactivity'
 import pinia, { useTokenStore } from '@/store'
+import { Notification } from '@arco-design/web-vue'
+
 import TokenForm from '@/components/TokenForm/index.vue'
 import { getAuthToken, getUID } from '@/utils/auth'
-import { computed } from '@vue/reactivity'
+import {
+  APIGetTokenBalance,
+  APIGetTokenList,
+  APIPreSwap,
+  APISwap,
+} from '@/api/token'
 
 const tokenStore = useTokenStore(pinia)
 
@@ -21,16 +27,20 @@ const toToken = ref({
   logo: 'https://tva1.sinaimg.cn/large/008vxvgGly1h82w08uskjj301s01st8h.jpg',
 })
 
-const rate = ref(18000)
+const swapNumber = ref(0)
+const swapBalance = ref(0)
+const swapToNumber = ref(0)
+const swapToBalance = ref(0)
 
-const swapData = {
-  fromTokenId: 1,
-  fromTokenNumber: 1,
-  toTokenId: 3,
-}
+const rate = ref(18000)
+const isPair = ref(true)
 
 const getRateTip = computed(() => {
-  return `1${fromToken.value.name} = ${rate.value}${toToken.value.name}`
+  if (isPair.value) {
+    return `1${fromToken.value.name} = ${rate.value}${toToken.value.name}`
+  } else {
+    return `This pair have not liquidity pool.`
+  }
 })
 
 const getRate = async (fromTokenNumebr?: number) => {
@@ -43,39 +53,90 @@ const getRate = async (fromTokenNumebr?: number) => {
   if (fromTokenNumebr) data.fromTokenNumber = fromTokenNumebr
   const result = await APIPreSwap(data)
   if (result) {
+    isPair.value = true
     rate.value = result.willReceiveTokenNumber / result.fromTokenNumber
+  } else {
+    isPair.value = false
   }
 }
 
+const updateTokenList = async () => {
+  const uid: number = getUID() as number
+  const tokenList = await APIGetTokenList({ uid })
+  if (tokenList !== null) tokenStore.setTokenList(tokenList)
+}
+
+const updateBalance = async () => {
+  const uid: number = getUID() as number
+  const fromBalance = await APIGetTokenBalance({
+    uid,
+    tokenId: fromToken.value.id,
+  })
+  const toBalance = await APIGetTokenBalance({
+    uid,
+    tokenId: toToken.value.id,
+  })
+  if (fromBalance) swapBalance.value = fromBalance.balance
+  if (toBalance) swapToBalance.value = toBalance.balance
+}
+
 const handleFromEnterToken = async (id: number, name: string, logo: string) => {
+  const uid: number = getUID() as number
   fromToken.value.id = id
   fromToken.value.name = name
   fromToken.value.logo = logo
+
+  const result = await APIGetTokenBalance({
+    uid,
+    tokenId: fromToken.value.id,
+  })
+  if (result) swapBalance.value = result.balance
+
   await getRate()
 }
 
 const handleToEnterToken = async (id: number, name: string, logo: string) => {
+  const uid: number = getUID() as number
   toToken.value.id = id
   toToken.value.name = name
   toToken.value.logo = logo
+
+  const result = await APIGetTokenBalance({
+    uid,
+    tokenId: toToken.value.id,
+  })
+
+  if (result) swapToBalance.value = result.balance
   await getRate()
 }
 
-const handleEnterFromNumber = async (id: number, number: number) => {
-  swapData.fromTokenId = id
-  swapData.fromTokenNumber = number
+const handleEnterFromNumber = async (number: number) => {
+  swapNumber.value = number
   await getRate(number)
+  swapToNumber.value = swapNumber.value * rate.value
 }
 
 const handleSwap = async () => {
-  console.log(swapData)
+  const result = await APISwap({
+    uid: getUID() as number,
+    fromTokenId: fromToken.value.id,
+    fromTokenNumber: swapNumber.value,
+    toTokenId: toToken.value.id,
+  })
+  if (result !== null) {
+    Notification.success({
+      title: 'Success',
+      content: `Swap ${swapNumber.value}${fromToken.value.name} to ${(
+        swapNumber.value * rate.value
+      ).toFixed(6)}${toToken.value.name}`,
+    })
+    await updateBalance()
+  }
 }
 
 onMounted(async () => {
-  if (getAuthToken()) {
-    const tokenList = await APIGetTokenList({ uid: getUID() as number })
-    if (tokenList !== null) tokenStore.setTokenList(tokenList)
-  }
+  await updateTokenList()
+  await updateBalance()
 })
 </script>
 
@@ -85,6 +146,8 @@ onMounted(async () => {
       <h2 class="swap__from">From</h2>
       <token-form
         :token="fromToken"
+        :token-balance="swapBalance"
+        :swap-number="swapNumber"
         @enter-token="handleFromEnterToken"
         @enter-number="handleEnterFromNumber"
       ></token-form>
@@ -92,8 +155,10 @@ onMounted(async () => {
       <token-form
         :forbidden="true"
         :token="toToken"
+        :token-balance="swapToBalance"
+        :swap-number="swapToNumber"
         @enter-token="handleToEnterToken"
-        @enter-number="(id) => (swapData.toTokenId = id)"
+        @enter-number="(id) => (toToken.id = id)"
       ></token-form>
       <div class="swap__tip">
         <img src="@/assets/icon/tip.svg" alt="tip" />
@@ -128,6 +193,7 @@ onMounted(async () => {
 }
 
 .swap-page .swap .swap__tip {
+  margin-top: 1em;
   color: #666666;
 }
 

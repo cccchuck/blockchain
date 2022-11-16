@@ -1,43 +1,44 @@
 <script lang="ts" setup>
-import { ref, Ref, onMounted } from 'vue'
+import { ref, Ref, watch } from 'vue'
 import pinia, { useTokenStore } from '@/store'
 
-import { getAuthToken, getUID } from '@/utils/auth'
+import { getAuthToken } from '@/utils/auth'
 import { Notification } from '@arco-design/web-vue'
 
 import type { IToken } from './types'
-import { APIGetTokenBalance } from '@/api'
 
 const tokenStore = useTokenStore(pinia)
 
 const props = defineProps({
   forbidden: Boolean,
+  swapNumber: Number,
+  tokenBalance: Number,
   token: Object,
 })
+
 const emit = defineEmits(['enter-token', 'enter-number'])
+
+const swapNumber = ref(props.swapNumber)
+
+watch(
+  () => props.swapNumber,
+  (newValue, oldValue) => {
+    swapNumber.value = newValue
+  }
+)
+
+const balance = ref(props.tokenBalance)
+
+watch(
+  () => props.tokenBalance,
+  (newValue, oldValue) => {
+    balance.value = newValue
+  }
+)
 
 const tokenList: Ref<IToken[]> = ref([])
 
-const tokenInfo = ref({
-  id: props.token?.id,
-  logo: props.token?.logo,
-  name: props.token?.name,
-  balance: 0.0,
-})
-
-const swapNumber = ref(0.0)
-
 const modalVisible = ref(false)
-
-const getTokenBalance = async () => {
-  const result = await APIGetTokenBalance({
-    uid: getUID() as number,
-    tokenId: tokenInfo.value.id,
-  })
-  if (result) {
-    tokenInfo.value.balance = (result as any).balance
-  }
-}
 
 const handleModalOk = () => {
   modalVisible.value = false
@@ -60,39 +61,29 @@ const handleSelectClick = () => {
 }
 
 const handleSelectToken = async (token: IToken) => {
-  tokenInfo.value.id = token.id
-  tokenInfo.value.name = token.name
-  tokenInfo.value.logo = token.logo
   modalVisible.value = false
-  await getTokenBalance()
-  emit(
-    'enter-token',
-    tokenInfo.value.id,
-    tokenInfo.value.name,
-    tokenInfo.value.logo
-  )
+  emit('enter-token', token.id, token.name, token.logo)
 }
 
 const handleMax = () => {
-  swapNumber.value = tokenInfo.value.balance
-  emit('enter-number', tokenInfo.value.id, swapNumber.value)
+  emit('enter-number', props.tokenBalance)
 }
 
 const handleBlur = () => {
-  emit('enter-number', tokenInfo.value.id, swapNumber.value)
+  emit('enter-number', swapNumber.value)
 }
-
-onMounted(async () => {
-  await getTokenBalance()
-})
 </script>
 
 <template>
   <div class="c-token-form">
     <div class="c-token-form__form">
       <div class="c-token-form__select" @click="handleSelectClick">
-        <img class="token_logo" :src="tokenInfo.logo" :alt="tokenInfo.name" />
-        <span class="token_name">{{ tokenInfo.name }}</span>
+        <img
+          class="token_logo"
+          :src="props.token?.logo"
+          :alt="props.token?.name"
+        />
+        <span class="token_name">{{ props.token?.name }}</span>
         <img
           class="token_select"
           src="@/assets/icon/arrow-down.svg"
@@ -116,7 +107,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="c-token-form__balance">
-      {{ tokenInfo.name }} Balance: {{ tokenInfo.balance }}
+      {{ props.token?.name }} Balance: {{ balance?.toFixed(6) }}
     </div>
   </div>
 
@@ -134,7 +125,7 @@ onMounted(async () => {
       v-for="token in tokenList"
       :key="token.id"
       class="token-item"
-      :class="{ active: token.id === tokenInfo.id }"
+      :class="{ active: token.id === props.token?.id }"
       @click="handleSelectToken(token)"
     >
       <img :src="token.logo" :alt="token.name" />
