@@ -1,5 +1,23 @@
 import { get, post } from '../utils'
 
+import type {
+  IAPIGetBalance,
+  IAPIGetStaked,
+  IAPIGetTokenBalance,
+  IAPIGetTokenList,
+  IAPIPreSwap,
+  IAPIStake,
+  IAPISwap,
+  IAPIUnstake,
+} from '../utils/types'
+
+const APIGetTokenList = async ({ uid }: { uid: number }) => {
+  return await post<IAPIGetTokenList>({
+    url: '/token/get-token-list',
+    data: { uid },
+  })
+}
+
 const APISwap = async ({
   uid,
   fromTokenId,
@@ -11,7 +29,7 @@ const APISwap = async ({
   fromTokenNumber: number
   toTokenId: number
 }) => {
-  return await post({
+  return await post<IAPISwap>({
     url: '/token/swap',
     data: {
       uid,
@@ -33,7 +51,7 @@ const APIPreSwap = async ({
   fromTokenNumber: number
   toTokenId: number
 }) => {
-  return await post({
+  return await post<IAPIPreSwap>({
     url: '/token/pre-swap',
     data: {
       uid,
@@ -53,7 +71,7 @@ const APIStake = async ({
   tokenId: number
   tokenNumber: number
 }) => {
-  return await post({
+  return await post<IAPIStake>({
     url: '/token/stake',
     data: {
       uid,
@@ -70,7 +88,7 @@ const APIUnstake = async ({
   uid: number
   stakeId: number
 }) => {
-  return await post({
+  return await post<IAPIUnstake>({
     url: '/token/unstake',
     data: {
       uid,
@@ -80,14 +98,14 @@ const APIUnstake = async ({
 }
 
 const APIGetStaked = async ({ uid }: { uid: number }) => {
-  return await post({
+  return await post<IAPIGetStaked>({
     url: '/token/get-staked',
     data: { uid },
   })
 }
 
 const APIGetBalance = async ({ uid }: { uid: number }) => {
-  return await post({
+  return await post<IAPIGetBalance>({
     url: '/token/get-balance',
     data: { uid },
   })
@@ -100,7 +118,7 @@ const APIGetTokenBalance = async ({
   uid: number
   tokenId: number
 }) => {
-  return await post({
+  return await post<IAPIGetTokenBalance>({
     url: '/token/get-token-balance',
     data: { uid, tokenId },
   })
@@ -113,5 +131,6 @@ export {
   APIUnstake,
   APIGetStaked,
   APIGetBalance,
+  APIGetTokenList,
   APIGetTokenBalance,
 }

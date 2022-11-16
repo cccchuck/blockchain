@@ -42,7 +42,7 @@ const handleSignIn = async () => {
   loading.value = false
 
   if (data) {
-    userStore.login(form.value.username, (data as any).uid, (data as any).token)
+    userStore.login(form.value.username, data.uid, data.token)
     router.push({ path: '/' })
   }
 }

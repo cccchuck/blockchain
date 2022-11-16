@@ -7,12 +7,12 @@ import { IResponseData } from './types'
 
 const router = useRouter()
 
-const handleServerResponse = (data: IResponseData) => {
+const handleServerResponse = <T>(data: IResponseData) => {
   if (data.code !== 20000) {
     Message.error(data.msg)
     return null
   }
-  return data.data
+  return data.data as T
 }
 
 const handleRequestError = (error: any) => {
@@ -40,12 +40,12 @@ const handleStatusError = (error: any) => {
   }
 }
 
-const handleRequest = async (
+const handleRequest = async <T>(
   config: AxiosRequestConfig
-): Promise<unknown | null> => {
+): Promise<T | null> => {
   try {
-    const result = await request(config)
-    const data = handleServerResponse(result.data)
+    const result = await request<T>(config)
+    const data = handleServerResponse<T>(result.data as IResponseData)
     return data
   } catch (error) {
     handleRequestError(error)
@@ -54,29 +54,29 @@ const handleRequest = async (
   }
 }
 
-async function get({ url }: { url: string }): Promise<unknown | null> {
+async function get<T>({ url }: { url: string }): Promise<T | null> {
   const config = {
     url,
     method: 'GET',
   }
 
-  return await handleRequest(config)
+  return await handleRequest<T>(config)
 }
 
-async function post({
+async function post<T>({
   url,
   data,
 }: {
   url: string
   data: unknown
-}): Promise<unknown | null> {
+}): Promise<T | null> {
   const config = {
     url,
     data,
     method: 'POST',
   }
 
-  return await handleRequest(config)
+  return await handleRequest<T>(config)
 }
 
 export { get, post }

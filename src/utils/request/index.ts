@@ -28,7 +28,7 @@ const cancelPendingRequest = (key: string) => {
   pendingRequest.delete(key)
 }
 
-const request = (config: AxiosRequestConfig<any>) => {
+const request = <T>(config: AxiosRequestConfig<T>) => {
   const service = axios.create({
     baseURL: 'http://localhost:8000',
     timeout: 5000,
@@ -70,7 +70,7 @@ const request = (config: AxiosRequestConfig<any>) => {
     }
   )
 
-  return service.request(config)
+  return service.request<T>(config)
 }
 
 export default request
