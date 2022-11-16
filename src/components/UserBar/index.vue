@@ -22,27 +22,18 @@ onMounted(async () => {
 
 <template>
   <div class="c-user-bar">
-    <a-dropdown trigger="hover" position="bottom">
-      <div v-show="userInfo.token !== ''" class="c-user-bar__item">
-        <div class="c-user-bar__info">
-          <p>{{ userInfo.username }}</p>
-          <span>
-            <icon-caret-down />
-          </span>
-        </div>
+    <div v-show="userInfo.token !== ''" class="c-user-bar__item">
+      <div class="c-user-bar__info">
+        <p class="c-user-bar__username">{{ userInfo.username }}</p>
+
+        <span class="c-user-bar__wallet"
+          ><img src="@/assets/icon/wallet.svg" alt="wallet"
+        /></span>
+        <span class="c-user-bar__logout" @click="userStore.logout()"
+          ><img src="@/assets/icon/logout.svg" alt="logout"
+        /></span>
       </div>
-      <template #content>
-        <p class="c-user-bar__pop-item">Wallet</p>
-        <a-button
-          type="primary"
-          shape="round"
-          status="danger"
-          @click="userStore.logout()"
-        >
-          Log Out
-        </a-button>
-      </template>
-    </a-dropdown>
+    </div>
     <div v-show="userInfo.token === ''">
       <div class="c-user-bar__login">
         <a-button
@@ -67,8 +58,9 @@ onMounted(async () => {
 
 .c-user-bar .c-user-bar__item {
   display: flex;
-  padding: 1em;
-  border-radius: 5px;
+  font-size: 1.2em;
+  padding: 0.8em 2em;
+  border-radius: 2em;
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
@@ -79,35 +71,30 @@ onMounted(async () => {
   align-items: center;
   transition: all 200ms linear;
 }
+.c-user-bar .c-user-bar__info .c-user-bar__wallet,
+.c-user-bar .c-user-bar__info .c-user-bar__logout {
+  width: 1.25em;
+  height: 1.25em;
+}
 
-.c-user-bar .c-user-bar__info:hover {
+.c-user-bar .c-user-bar__info .c-user-bar__wallet img,
+.c-user-bar .c-user-bar__info .c-user-bar__logout img {
+  width: 1.25em;
+  height: 1.25em;
+  transition: all 200ms linear;
+}
+
+.c-user-bar .c-user-bar__info .c-user-bar__wallet img:hover,
+.c-user-bar .c-user-bar__info .c-user-bar__logout img:hover {
   cursor: pointer;
+  transform: translateY(-2px);
 }
 
-.c-user-bar .c-user-bar__info:hover p {
+.c-user-bar .c-user-bar__info .c-user-bar__username {
   font-weight: bold;
-}
-.c-user-bar .c-user-bar__info:hover span {
-  rotate: -180deg;
-}
-
-/* .c-user-bar .c-user-bar__info:hover */
-
-.c-user-bar .c-user-bar__info p {
-  width: 4em;
-  color: #888888;
-  text-align: center;
-  font-size: 16px;
-  transition: all 200ms linear;
-}
-
-.c-user-bar .c-user-bar__info span {
-  color: #888888;
-  font-size: 18px;
-  transition: all 200ms linear;
 }
 
 .c-user-bar .c-user-bar__info * + * {
-  margin-left: 0.5em;
+  margin-left: 1em;
 }
 </style>

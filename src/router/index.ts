@@ -74,7 +74,7 @@ router.beforeEach(
 
 router.afterEach(
   (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-    document.title = (to.meta.title as string) + ' | ExcrciseBlockchain'
+    document.title = (to.meta.title as string) + ' | ExerciseBlockchain'
 
     if (from.fullPath.startsWith('/sign-in') && from.query?.redirect)
       router.replace({ path: from.query.redirect as string })

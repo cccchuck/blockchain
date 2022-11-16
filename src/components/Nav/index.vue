@@ -40,22 +40,22 @@ const navList: RouteRecordRaw[] = generateNavList()
 <style scoped>
 .c-nav-menu {
   display: flex;
+  font-size: 1.2em;
   padding: 0 1em;
   background-color: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0 1px 10px 0 rgba(255, 255, 255, 0.6);
+  border-radius: 2em;
 }
 
 .c-nav-menu .c-nav-menu-item {
-  padding: 1em 0;
   width: 5em;
+  padding: 0.8em 0;
+  font-weight: bold;
   text-align: center;
-  border-radius: 0.5em;
   transition: all 200ms linear;
 }
 
 .c-nav-menu .c-nav-menu-item:hover {
-  font-weight: bold;
+  transform: scale(1.1);
   cursor: pointer;
 }
 
