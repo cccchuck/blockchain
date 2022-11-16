@@ -39,12 +39,12 @@ const handleSignIn = async () => {
     password: form.value.password,
   })
 
-  if (data)
-    userStore.login(form.value.username, (data as any).uid, (data as any).token)
-
   loading.value = false
 
-  router.push({ path: '/' })
+  if (data) {
+    userStore.login(form.value.username, (data as any).uid, (data as any).token)
+    router.push({ path: '/' })
+  }
 }
 </script>
 

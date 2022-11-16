@@ -22,7 +22,7 @@ onMounted(async () => {
 
 <template>
   <div class="c-user-bar">
-    <a-popover position="br">
+    <a-dropdown trigger="hover" position="bottom">
       <div v-show="userInfo.token !== ''" class="c-user-bar__item">
         <div class="c-user-bar__info">
           <p>{{ userInfo.username }}</p>
@@ -33,12 +33,16 @@ onMounted(async () => {
       </div>
       <template #content>
         <p class="c-user-bar__pop-item">Wallet</p>
-        <a-button type="primary" shape="round" status="danger"
-          >Log Out</a-button
+        <a-button
+          type="primary"
+          shape="round"
+          status="danger"
+          @click="userStore.logout()"
         >
+          Log Out
+        </a-button>
       </template>
-    </a-popover>
-
+    </a-dropdown>
     <div v-show="userInfo.token === ''">
       <div class="c-user-bar__login">
         <a-button
@@ -64,7 +68,7 @@ onMounted(async () => {
 .c-user-bar .c-user-bar__item {
   display: flex;
   padding: 1em;
-  border-radius: 1em;
+  border-radius: 5px;
   justify-content: center;
   align-items: center;
   background-color: #ffffff;

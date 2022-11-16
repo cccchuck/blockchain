@@ -42,7 +42,7 @@ const navList: RouteRecordRaw[] = generateNavList()
   display: flex;
   padding: 0 1em;
   background-color: #ffffff;
-  border-radius: 1em;
+  border-radius: 5px;
   box-shadow: 0 1px 10px 0 rgba(255, 255, 255, 0.6);
 }
 
