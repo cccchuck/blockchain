@@ -3,6 +3,7 @@ import { get, post } from '../utils'
 import type {
   IAPIGetBalance,
   IAPIGetStaked,
+  IAPIGetStake,
   IAPIGetTokenBalance,
   IAPIGetTokenList,
   IAPIPreSwap,
@@ -97,6 +98,13 @@ const APIUnstake = async ({
   })
 }
 
+const APIGetStake = async ({ uid }: { uid: number }) => {
+  return await post<IAPIGetStake>({
+    url: '/token/get-stake',
+    data: { uid },
+  })
+}
+
 const APIGetStaked = async ({ uid }: { uid: number }) => {
   return await post<IAPIGetStaked>({
     url: '/token/get-staked',
@@ -129,6 +137,7 @@ export {
   APIPreSwap,
   APIStake,
   APIUnstake,
+  APIGetStake,
   APIGetStaked,
   APIGetBalance,
   APIGetTokenList,

@@ -12,6 +12,23 @@ export interface ITokenBalance {
   tokenBalance: number
 }
 
+export interface IStake {
+  tokenId: number
+  tokenName: string
+  tokenLogo: string
+  APY: number
+}
+
+export interface IStaked {
+  stakeId: number
+  tokenId: number
+  tokenName: string
+  tokenLogo: string
+  tokenNum: number
+  stakeTime: Date
+  APY: number
+}
+
 export interface IResponseData {
   code: number
   msg: string
@@ -50,14 +67,9 @@ export type IAPIStake = IResponseData
 
 export type IAPIUnstake = IResponseData
 
-export interface IAPIGetStaked {
-  stakeId: number
-  tokenId: number
-  tokenName: string
-  tokenLogo: string
-  tokenNum: number
-  stakeTime: Date
-}
+export type IAPIGetStake = IStake[]
+
+export type IAPIGetStaked = IStaked[]
 
 export interface IAPIGetTokenBalance {
   balance: number
