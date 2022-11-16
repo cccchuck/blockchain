@@ -12,7 +12,7 @@ body {
   width: 100vw;
   min-height: 100vh;
   /* background-image: linear-gradient(to top, #a1c4fd 0%, #c2e9fb 100%); */
-  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+  background-image: linear-gradient(to top, #ddd 0%, #a6c1ee 100%);
   /* background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); */
 }
 
