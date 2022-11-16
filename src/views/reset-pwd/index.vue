@@ -108,8 +108,8 @@ const handleResetPassword = async () => {
     code: form.value.code,
   })
 
+  loading.value = false
   if (result !== null) {
-    loading.value = false
     Message.success('Reset password successfully')
   }
 }
