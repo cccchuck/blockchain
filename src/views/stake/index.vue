@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 
+import { Notification } from '@arco-design/web-vue'
+
 import {
   APIGetStaked,
   APIGetStake,
@@ -9,9 +11,9 @@ import {
   APIUnstake,
 } from '@/api'
 import { getUID } from '@/utils/auth'
+
 import type { Ref } from 'vue'
 import type { IStakeToken, IStakedToken } from './types'
-import { Notification } from '@arco-design/web-vue'
 
 const uid = getUID() as number
 const stakeTokenList: Ref<IStakeToken> = ref([])

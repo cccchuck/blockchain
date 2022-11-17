@@ -70,6 +70,12 @@ const router = createRouter({
 
 router.beforeEach(
   (to: RouteLocationNormalized, from: RouteLocationNormalized, next) => {
+    if (from.query.redirect) {
+      const { redirect } = from.query
+      from.query.redirect = null
+      next(redirect as string)
+    }
+
     if (to.meta.requireAuth && !getAuthToken()) {
       Message.warning('Should Login First')
       next({ path: '/sign-in', query: { redirect: to.fullPath } })

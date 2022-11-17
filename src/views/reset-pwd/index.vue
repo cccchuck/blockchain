@@ -1,9 +1,13 @@
 <script lang="ts" setup>
-import { Message, Notification } from '@arco-design/web-vue'
 import { ref } from 'vue'
-import Loading from '@/components/Loading/index.vue'
+import { useRouter } from 'vue-router'
 import { computed } from '@vue/reactivity'
+import { Message, Notification } from '@arco-design/web-vue'
+
 import { APIResetPwd, APISendCode } from '@/api'
+import Loading from '@/components/Loading/index.vue'
+
+const router = useRouter()
 
 const loading = ref(false)
 const isWaitCode = ref(false)
@@ -111,6 +115,7 @@ const handleResetPassword = async () => {
   loading.value = false
   if (result !== null) {
     Message.success('Reset password successfully')
+    router.push({ path: '/sign-in' })
   }
 }
 </script>
