@@ -1,13 +1,20 @@
 import { Message } from '@arco-design/web-vue'
-import { useRouter } from 'vue-router'
 import type { AxiosRequestConfig } from 'axios'
 
 import request from '@/utils/request'
 import { IResponseData } from './types'
 
-const router = useRouter()
+import router from '@/router'
 
 const handleServerResponse = <T>(data: IResponseData) => {
+  if (data.code === 40001) {
+    router.push({
+      path: '/sign-in',
+      query: { redirect: router.currentRoute.value.fullPath },
+    })
+    return null
+  }
+
   if (data.code !== 20000) {
     Message.error(data.msg)
     return null
@@ -23,13 +30,6 @@ const handleRequestError = (error: any) => {
 const handleStatusError = (error: any) => {
   if (error.config) {
     switch (error.config) {
-      case 401:
-        Message.error('Authorized Expired')
-        router.push({
-          path: '/sign-in',
-          query: { redirect: router.currentRoute.value.fullPath },
-        })
-        break
       case 404:
         Message.error('Source Not Exist')
         break

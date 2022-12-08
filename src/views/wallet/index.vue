@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import type { Ref } from 'vue'
-import type { IToken } from './types'
+
 import { getUID } from '@/utils/auth'
 import { APIGetBalance } from '@/api'
+
+import type { Ref } from 'vue'
+import type { IToken } from './types'
 const uid = getUID() as number
 const tokenList: Ref<IToken> = ref([])
 

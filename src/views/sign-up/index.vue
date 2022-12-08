@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-import { Message, Notification } from '@arco-design/web-vue'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Message, Notification } from '@arco-design/web-vue'
 
-import Loading from '@/components/Loading/index.vue'
 import { APISignUp } from '@/api'
+import Loading from '@/components/Loading/index.vue'
+
+const router = useRouter()
 
 const loading = ref(false)
 const form = ref({
@@ -67,6 +70,7 @@ const handleSignUp = async () => {
   if (result !== null) {
     loading.value = false
     Message.success('Sign Up Success')
+    router.push({ path: '/sign-in' })
   }
 }
 </script>

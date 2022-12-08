@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { Notification } from '@arco-design/web-vue'
 import { ref } from 'vue'
+import { Notification } from '@arco-design/web-vue'
+
 import Loading from '@/components/Loading/index.vue'
 import router from '@/router'
 import pinia, { useUserStore } from '@/store'

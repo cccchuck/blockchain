@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { computed } from '@vue/reactivity'
-import pinia, { useTokenStore } from '@/store'
-import { Notification } from '@arco-design/web-vue'
+import { Message, Notification } from '@arco-design/web-vue'
 
+import pinia, { useTokenStore } from '@/store'
 import TokenForm from '@/components/TokenForm/index.vue'
 import { getUID } from '@/utils/auth'
 import {
@@ -44,6 +44,11 @@ const getRateTip = computed(() => {
 })
 
 const getRate = async (fromTokenNumebr?: number) => {
+  if (!getUID() || !getAuthToken()) {
+    Message.error('Should Login First')
+    return
+  }
+
   const data = {
     uid: getUID() as number,
     fromTokenId: fromToken.value.id,
@@ -117,6 +122,11 @@ const handleEnterFromNumber = async (number: number) => {
 }
 
 const handleSwap = async () => {
+  if (!getUID() || !getAuthToken()) {
+    Message.error('Should Login First')
+    return
+  }
+
   const result = await APISwap({
     uid: getUID() as number,
     fromTokenId: fromToken.value.id,
@@ -135,8 +145,10 @@ const handleSwap = async () => {
 }
 
 onMounted(async () => {
-  await updateTokenList()
-  await updateBalance()
+  if (getUID() && getAuthToken()) {
+    await updateTokenList()
+    await updateBalance()
+  }
 })
 </script>
 
