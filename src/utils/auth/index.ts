@@ -1,3 +1,4 @@
+// 定义了一些工具类函数去操作 localStorage
 export function getAuthToken() {
   return localStorage.getItem('token') || ''
 }

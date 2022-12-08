@@ -5,7 +5,7 @@ import pinia, { useTokenStore } from '@/store'
 import { Notification } from '@arco-design/web-vue'
 
 import TokenForm from '@/components/TokenForm/index.vue'
-import { getAuthToken, getUID } from '@/utils/auth'
+import { getUID } from '@/utils/auth'
 import {
   APIGetTokenBalance,
   APIGetTokenList,

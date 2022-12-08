@@ -1,12 +1,17 @@
+<!-- 该组件为自定义导航组件 -->
 <script setup lang="ts">
 import { useRouter, RouteRecordRaw } from 'vue-router'
 
+// 获取到在 @/router/index.ts 中定义的 router 对象
 const router = useRouter()
 
+// 判断当前传入的路由路径是否与当前页面路由路径相等
+// 主要用于在路径相等时，切换某个 nav-item 为选中状态
 const isActive = (route: RouteRecordRaw) => {
   return route.path === router.currentRoute.value.fullPath
 }
 
+// 遍历所有路由，找到需要在导航栏显示的路由，并在下面渲染
 const generateNavList = () => {
   let result: RouteRecordRaw[] = []
   const routes = router.getRoutes()
@@ -20,6 +25,7 @@ const generateNavList = () => {
   return result
 }
 
+// 所有需要渲染在导航栏的路由
 const navList: RouteRecordRaw[] = generateNavList()
 </script>
 

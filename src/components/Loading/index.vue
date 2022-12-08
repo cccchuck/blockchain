@@ -1,3 +1,7 @@
+<!-- 
+  该组件为全局 Loading 组件，接收一个 loading 参数
+  loading 参数类型为布尔值，控制是否为 loading 状态
+ -->
 <script lang="ts" setup>
 const props = defineProps(['loading'])
 </script>

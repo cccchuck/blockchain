@@ -1,14 +1,27 @@
+<!-- 
+  该组件为导航栏旁边的用户组件，负责登录、注册、退出等
+ -->
 <script setup lang="ts">
-import { APIGetUserInfo } from '@/api/users'
+// 引入在 @/router/index.ts 中定义的路由
 import router from '@/router'
-import pinia, { useUserStore } from '@/store'
-import { getAuthToken, getUID } from '@/utils/auth'
+// 引入 mounted 生命周期钩子
 import { onMounted } from 'vue'
 
+// 引入获取用户信息 API
+import { APIGetUserInfo } from '@/api/users'
+// 引入 pinia 全局状态管理库和 user store
+import pinia, { useUserStore } from '@/store'
+// 引入工具函数 getAuthToken 和 getUID
+import { getAuthToken, getUID } from '@/utils/auth'
+
+// 获取 user store
 const userStore = useUserStore(pinia)
 
+// 获取 user store 中的用户信息，userStore 为响应式对象
 const userInfo = userStore.userInfo
 
+// 在组件被挂载时，执行下面函数去获取用户信息
+// 如果用户登录没过期，则直接拉取用户信息
 onMounted(async () => {
   if (!userStore.userInfo.token) {
     if (getAuthToken() !== '' && getUID() !== null) {

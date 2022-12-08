@@ -1,3 +1,8 @@
+<!-- 
+  本文件中并无太多需要赘述的逻辑
+  导入了两个自定义组件，使用 router-view 渲染子组件
+ -->
+
 <script setup lang="ts">
 import CNav from '@/components/Nav/index.vue'
 import CUserBar from '@/components/UserBar/index.vue'
@@ -22,3 +27,5 @@ nav {
   align-items: center;
 }
 </style>
+
+<!-- 接下来请阅读 ./components/* -->
