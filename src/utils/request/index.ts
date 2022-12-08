@@ -44,13 +44,12 @@ const cancelPendingRequest = (key: string) => {
 
 const request = <T>(config: AxiosRequestConfig<T>) => {
   const service = axios.create({
-    baseURL: 'http://10.131.1.115:8000',
+    baseURL: 'http://localhost:8000',
     timeout: 5000,
   })
 
   service.interceptors.request.use(
     (config) => {
-      console.log(config)
       const key = getPendingRequestKey(config)
 
       if (pendingRequest.get(key) !== undefined) {
