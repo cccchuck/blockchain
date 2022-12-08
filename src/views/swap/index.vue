@@ -5,7 +5,7 @@ import { Message, Notification } from '@arco-design/web-vue'
 
 import pinia, { useTokenStore } from '@/store'
 import TokenForm from '@/components/TokenForm/index.vue'
-import { getUID } from '@/utils/auth'
+import { getUID, getAuthToken } from '@/utils/auth'
 import {
   APIGetTokenBalance,
   APIGetTokenList,
